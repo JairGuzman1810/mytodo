@@ -5,7 +5,28 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
+import TaskItem from './src/components/TaskItem';
+import {TaskItemProps} from './src/components/interfaces';
+
+const tasks = [
+  {
+    title: 'Alimentar al perro.',
+    done: false,
+    date: new Date(),
+  },
+  {
+    title: 'Hablar con Marissa.',
+    done: false,
+    date: new Date(),
+  },
+];
+// Pasamos todos nuestros elementos de task para que se visualice,
+//Se tipa con una interfaz para que se puedan obtener de manera correcta los elementos.
+const renderItem = ({item}: TaskItemProps) => {
+  return <TaskItem item={item} />;
+};
 
 export default function App() {
   return (
@@ -23,6 +44,10 @@ export default function App() {
             <Text style={styles.whiteText}>Agregar</Text>
           </TouchableOpacity>
         </View>
+      </View>
+      <View style={styles.scrollcontainer}>
+        {/* Se pasan los elementos a la función que se hace cargo de proyectarlos y en data se pasan los elementos. */}
+        <FlatList renderItem={renderItem} data={tasks} />
       </View>
     </View>
   );
@@ -70,4 +95,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginLeft: 20,
   },
+  scrollcontainer: {},
 });
