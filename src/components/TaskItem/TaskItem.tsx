@@ -15,7 +15,9 @@ const TaskItem: FC<TaskItemProps> = ({item, markDone, deleteFunction}) => {
         </TouchableOpacity>
       </View>
       {item.done && (
-        <TouchableOpacity style={styles.removebutton} onPress={deleteFunction}>
+        <TouchableOpacity
+          style={styles.removebutton}
+          onPress={() => deleteFunction(item)}>
           <Text style={styles.whiteText}>Eliminar</Text>
         </TouchableOpacity>
       )}

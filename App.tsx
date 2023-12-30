@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {View, Text, TextInput, TouchableOpacity, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  Alert,
+} from 'react-native';
 import TaskItem from './src/components/TaskItem';
 import styles from './src/styles';
 import {Task} from './src/types';
@@ -30,22 +37,25 @@ export default function App() {
   const [text, setText] = useState<string>('');
 
   const addTask = () => {
-    const tmp = [...tasks];
-    const newTask = {
-      title: text,
-      done: false,
-      date: new Date(),
-    };
+    if (text !== '') {
+      const tmp = [...tasks];
+      const newTask = {
+        title: text,
+        done: false,
+        date: new Date(),
+      };
 
-    tmp.push(newTask);
-    setTasks(tmp);
-    setText('');
+      tmp.push(newTask);
+      setTasks(tmp);
+      setText('');
+    } else {
+      Alert.alert('El nombre de la tarea es obligatorio.');
+    }
   };
 
   const markDone = (task: Task) => {
     const tmpTask = [...tasks];
     // Buscamos el index del mediante el titulo de la tarea seleccionado.
-    console.log(task);
     const index = tmpTask.findIndex(el => el.title === task.title);
 
     //Conseguimos la tarea con el index.
@@ -54,8 +64,14 @@ export default function App() {
     todo.done = !todo.done;
     setTasks(tmpTask);
   };
-  const deleteFunction = () => {
-    console.log('marqueado.');
+  const deleteFunction = (task: Task) => {
+    const tmpTask = [...tasks];
+    // Buscamos el index del mediante el titulo de la tarea seleccionado.
+    const index = tmpTask.findIndex(el => el.title === task.title);
+
+    tmpTask.splice(index, 1);
+    setTasks(tmpTask);
+    Alert.alert('Tarea eliminada con exito');
   };
   return (
     <View style={styles.container}>

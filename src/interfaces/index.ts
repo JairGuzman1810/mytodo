@@ -8,5 +8,5 @@ export interface TaskItemProps {
     // Agrega cualquier otra propiedad necesaria aquí
   };
   markDone: (task: Task) => void;
-  deleteFunction: () => void;
+  deleteFunction: (task: Task) => void;
 }
