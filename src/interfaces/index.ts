@@ -5,4 +5,6 @@ export interface TaskItemProps {
     date: Date;
     // Agrega cualquier otra propiedad necesaria aquí
   };
+  markDone: () => void;
+  deleteFunction: () => void;
 }
