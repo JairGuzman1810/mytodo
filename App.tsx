@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
 import TaskItem from './src/components/TaskItem';
 import styles from './src/styles';
 import {Task} from './src/types';
+import useTaskStorage from './src/hooks/useTaskStorage';
 
 /*const tasks = [
   {
@@ -35,19 +36,40 @@ import {Task} from './src/types';
 export default function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [text, setText] = useState<string>('');
+  const {onSaveTask, onGetTask, onUpdateTask} = useTaskStorage();
 
-  const addTask = () => {
+  const loadTasks = async () => {
+    try {
+      const tasksResponse = await onGetTask();
+      setTasks(tasksResponse);
+      //console.log(tasksResponse);
+    } catch (error) {
+      console.log(error);
+      setTasks([]);
+    }
+  };
+
+  useEffect(() => {
+    loadTasks().catch(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const addTask = async () => {
     if (text !== '') {
-      const tmp = [...tasks];
-      const newTask = {
-        title: text,
-        done: false,
-        date: new Date(),
-      };
+      try {
+        await onSaveTask({
+          title: text,
+          done: false,
+          date: new Date().toISOString(),
+        });
 
-      tmp.push(newTask);
-      setTasks(tmp);
-      setText('');
+        Alert.alert('Tarea agregada con exito.');
+        setText('');
+        loadTasks();
+      } catch (error) {
+        Alert.alert('Hubo un error al agregar la tarea.');
+        console.log(error);
+      }
     } else {
       Alert.alert('El nombre de la tarea es obligatorio.');
     }
@@ -62,7 +84,8 @@ export default function App() {
     const todo = tmpTask[index];
     //cambiar el estatus al contrario de si esta marcado o no.
     todo.done = !todo.done;
-    setTasks(tmpTask);
+    onUpdateTask(tmpTask);
+    loadTasks();
   };
   const deleteFunction = (task: Task) => {
     const tmpTask = [...tasks];
@@ -70,7 +93,8 @@ export default function App() {
     const index = tmpTask.findIndex(el => el.title === task.title);
 
     tmpTask.splice(index, 1);
-    setTasks(tmpTask);
+    onUpdateTask(tmpTask);
+    loadTasks();
     Alert.alert('Tarea eliminada con exito');
   };
   return (

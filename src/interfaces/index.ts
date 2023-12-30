@@ -4,7 +4,7 @@ export interface TaskItemProps {
   item: {
     title: string;
     done: boolean;
-    date: Date;
+    date: string;
     // Agrega cualquier otra propiedad necesaria aquí
   };
   markDone: (task: Task) => void;

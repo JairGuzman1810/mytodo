@@ -2,8 +2,11 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import React, {FC} from 'react';
 import {TaskItemProps} from '../../interfaces';
 import styles from '../../styles';
+import {format} from 'date-fns';
 
 const TaskItem: FC<TaskItemProps> = ({item, markDone, deleteFunction}) => {
+  const formattedDate = format(item.date, 'dd/MM/yyyy');
+
   return (
     <View style={styles.itemContainer}>
       <View style={styles.leftcontainer}>
@@ -11,7 +14,7 @@ const TaskItem: FC<TaskItemProps> = ({item, markDone, deleteFunction}) => {
           <Text style={item.done ? styles.textDone : styles.text}>
             {item.title}
           </Text>
-          <Text style={styles.text}>{item.date.toLocaleDateString()}</Text>
+          <Text style={styles.text}>{formattedDate}</Text>
         </TouchableOpacity>
       </View>
       {item.done && (
