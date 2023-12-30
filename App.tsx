@@ -21,6 +21,11 @@ const tasks = [
     done: false,
     date: new Date(),
   },
+  {
+    title: 'Programar un rato.',
+    done: true,
+    date: new Date(),
+  },
 ];
 // Pasamos todos nuestros elementos de task para que se visualice,
 //Se tipa con una interfaz para que se puedan obtener de manera correcta los elementos.
@@ -95,5 +100,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginLeft: 20,
   },
-  scrollcontainer: {},
+  scrollcontainer: {
+    marginTop: 20,
+  },
 });
