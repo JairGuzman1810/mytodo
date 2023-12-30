@@ -56,22 +56,32 @@ export default function App() {
 
   const addTask = async () => {
     if (text !== '') {
-      try {
-        await onSaveTask({
-          title: text,
-          done: false,
-          date: new Date().toISOString(),
-        });
+      //Verificamos si el titulo es unico.
+      const isTitleUnique = tasks.every(task => task.title !== text);
 
-        Alert.alert('Tarea agregada con exito.');
-        setText('');
-        loadTasks();
-      } catch (error) {
-        Alert.alert('Hubo un error al agregar la tarea.');
-        console.log(error);
+      if (isTitleUnique) {
+        try {
+          await onSaveTask({
+            title: text,
+            done: false,
+            date: new Date().toISOString(),
+          });
+
+          Alert.alert('Exito', 'Tarea agregada con exito.');
+          setText('');
+          loadTasks();
+        } catch (error) {
+          Alert.alert('Error', 'Hubo un error al agregar la tarea.');
+          console.log(error);
+        }
+      } else {
+        Alert.alert(
+          'Tarea duplicada',
+          'El nombre de la tarea no se debe repetir.',
+        );
       }
     } else {
-      Alert.alert('El nombre de la tarea es obligatorio.');
+      Alert.alert('Campo vacio', 'El nombre de la tarea es obligatorio.');
     }
   };
 
@@ -88,14 +98,29 @@ export default function App() {
     loadTasks();
   };
   const deleteFunction = (task: Task) => {
-    const tmpTask = [...tasks];
-    // Buscamos el index del mediante el titulo de la tarea seleccionado.
-    const index = tmpTask.findIndex(el => el.title === task.title);
-
-    tmpTask.splice(index, 1);
-    onUpdateTask(tmpTask);
-    loadTasks();
-    Alert.alert('Tarea eliminada con exito');
+    Alert.alert(
+      'Confirmación',
+      '¿Estás seguro de eliminar esta tarea?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Eliminar',
+          onPress: () => {
+            // Usuario hizo clic en "Eliminar"
+            const tmpTask = [...tasks];
+            const index = tmpTask.findIndex(el => el.title === task.title);
+            tmpTask.splice(index, 1);
+            onUpdateTask(tmpTask);
+            loadTasks();
+            Alert.alert('Tarea eliminada con éxito');
+          },
+        },
+      ],
+      {cancelable: false},
+    );
   };
   return (
     <View style={styles.container}>
