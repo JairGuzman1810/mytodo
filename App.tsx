@@ -22,21 +22,15 @@ import {Task} from './src/types';
   },
 ];*/
 
-const deleteFunction = () => {
-  console.log('Deleteado');
-};
-const markDone = () => {
-  console.log('marqueado.');
-};
 // Pasamos todos nuestros elementos de task para que se visualice,
 //Se tipa con una interfaz para que se puedan obtener de manera correcta los elementos.
 
 export default function App() {
-  const [task, setTask] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [text, setText] = useState<string>('');
 
   const addTask = () => {
-    const tmp = [...task];
+    const tmp = [...tasks];
     const newTask = {
       title: text,
       done: false,
@@ -44,8 +38,24 @@ export default function App() {
     };
 
     tmp.push(newTask);
-    setTask(tmp);
+    setTasks(tmp);
     setText('');
+  };
+
+  const markDone = (task: Task) => {
+    const tmpTask = [...tasks];
+    // Buscamos el index del mediante el titulo de la tarea seleccionado.
+    console.log(task);
+    const index = tmpTask.findIndex(el => el.title === task.title);
+
+    //Conseguimos la tarea con el index.
+    const todo = tmpTask[index];
+    //cambiar el estatus al contrario de si esta marcado o no.
+    todo.done = !todo.done;
+    setTasks(tmpTask);
+  };
+  const deleteFunction = () => {
+    console.log('marqueado.');
   };
   return (
     <View style={styles.container}>
@@ -68,7 +78,7 @@ export default function App() {
       <View style={styles.scrollcontainer}>
         {/* Se pasan los elementos a la función que se hace cargo de proyectarlos y en data se pasan los elementos. */}
         <FlatList
-          data={task}
+          data={tasks}
           renderItem={({item}) => (
             <TaskItem
               item={item}

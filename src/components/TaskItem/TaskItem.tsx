@@ -7,7 +7,7 @@ const TaskItem: FC<TaskItemProps> = ({item, markDone, deleteFunction}) => {
   return (
     <View style={styles.itemContainer}>
       <View style={styles.leftcontainer}>
-        <TouchableOpacity onPress={markDone}>
+        <TouchableOpacity onPress={() => markDone(item)}>
           <Text style={item.done ? styles.textDone : styles.text}>
             {item.title}
           </Text>

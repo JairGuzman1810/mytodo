@@ -1,3 +1,5 @@
+import {Task} from '../types';
+
 export interface TaskItemProps {
   item: {
     title: string;
@@ -5,6 +7,6 @@ export interface TaskItemProps {
     date: Date;
     // Agrega cualquier otra propiedad necesaria aquí
   };
-  markDone: () => void;
+  markDone: (task: Task) => void;
   deleteFunction: () => void;
 }
